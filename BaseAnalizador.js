@@ -136,109 +136,92 @@
       }
     };
     
-    comma = function() {
-      var result = new Array();
-      var type;
-      
-      if (lookahead.type === "IF")
-        result.push(conditional());
-      else 
-        result.push(expression());
-      
-      while (lookahead && lookahead.type === ",") {
-        match(",");
-        if (lookahead.type === "IF")
-          result.push(conditional());
-        else 
-          result.push(expression());
+    primario = function() {
+      if(lookahead.type === "COSA"){
+        //declaración
       }
-      return result[result.length - 1];
+      else if(lookahead.type === "ID"){
+        if(lookahead.lookahead.type === "="){
+          //asignación
+        }
+        else if(lookahead.lookahead.type === "("){
+          //llamada
+        }
+      }
     };
     
-    assign = function(id, notEv) {
-      var assignment;
-        if (lookahead.type === "=") {
-          if (id == true || id == false) {
-            throw "Syntax Error: 'true' and 'false' cannot be identifiers";
-          } else {
-            match("=");
-            assignment = expression();
-            if (!notEv)
-              tabla_id[id] = assignment;
-          }
-        } else {
-            assignment = comma();
-        }
-        return assignment
-      
+    declaracion = function() {
+      match("COSA");
+      //asignación();
     }
     
-    compare = function(left) {
-      var comparator = lookahead.value;
-      var result, right;
-      match("COMPARISON");
-      right = expression();
-      switch(comparator) {
-        case "<" : result = left < right;
-                    break;
-        case ">" : result = left > right;
-                    break;
-        case "==" : result = left == right;
-                    break;
-        case ">=" : result = left >= right;
-                     break;
-        case "<=" : result = left <= right;
-                    break;
-        case "!=" : result = left != right;
-                    break;
+    asignacion = function(){
+      match("ID");
+      match("=");
+      if(lookahead.type === "HAZESTO"){
+        //Función
       }
-      return result;
-    }
-    
-    conditional = function() {
-      let condition, result, resultIf, resultElse;
-      match("IF");
-      condition = expression();
-      match("THEN");
-      resultIf = expression();
-      match("ELSE");
-      if (condition) {
-        result = resultIf;
-        resultElse = expression(true);
-      } else {
-        result = expression();
+      else if(lookahead.type === "(" || lookahead.type === "NUM"){
+        //expression
       }
-  
-      return result;
+      else if(lookahead.type === "ID"){
+        //asignacion
+      }
+      match(";");
     }
     
-    expression = function(notEv) {
+    llamada = function(){
+      match("ID");
+      match("(");
+      while(lookahead.type === "ID" || lookahead.type === "(" || lookahead.type === "NUM"){
+        //atributo
+      }
+      match(")");
+      match(";");
+    }
+    
+    funcion = function(){
+      match("HAZESTO");
+      match("(");
+      while(lookahead.type === "ID" || lookahead.type === "(" || lookahead.type === "NUM"){
+        //atributo
+      }
+      match(")");
+      match("{");
+      //while algo
+        //instruccion
+      match("}");
+      match(";");
+    }
+    
+    atributo = function(){
+      if(lookahead.type === "ID"){
+        match("ID");
+      }
+      else if(lookahead.type === "(" || lookahead.type === "NUM"){
+        //expression
+      }
+    }
+    
+    expression = function(){
       var result, right, type;
       result = term();
-      
-      if (lookahead && lookahead.type === "=") {
-        result = assign(result, notEv);
-      } else {
-        while(lookahead && lookahead.type === "ADDOP"){
-          type = lookahead.value;
-          match("ADDOP");
-          right = term();
-          if(type === "+"){
-            result += right;
-          }
-          else if(type === "-"){
-            result -= right;
-          }
+      console.log(result);
+      while(lookahead && lookahead.type === "ADDOP"){
+        type = lookahead.value;
+        match("ADDOP");
+        right = term();
+        if(type === "+"){
+          result += right;
         }
-        
-        if(lookahead && lookahead.type === "COMPARISON") {
-          result = compare(result);
+        else if(type === "-"){
+          result -= right;
         }
-      } 
+      }
       return result;
-    };
+    }
     
-    term = function() {
+    term = function(){
       var result, right, type;
       result = factor();
       if (lookahead && lookahead.type === "MULTOP") {
@@ -253,41 +236,98 @@
         }
       }
       return result;
-    };
+    }
     
-    factor = function() {
-      var result, id;
+    factor = function(){
+      var result;
       result = null;
       if (lookahead.type === "NUM") {
         result = lookahead.value;
         match("NUM");
-      } else if(lookahead.type === "ID") {
-            id = lookahead.value;
-            match("ID");
-            if (lookahead && lookahead.type === "="){
-              result = id;
-            }else {
-              result = tabla_id[id];
-              if(result == null)
-                throw "Error: " + id + " is not initialized";
-            }
-      } else if (lookahead.type === "BOOLEAN") {
-          result = lookahead.value;
-          match("BOOLEAN");
       } else if (lookahead.type === "(") {
-          match("(");
-          result = assign();
-          match(")");
-      } else if (lookahead.type === "IF") {
-          result = conditional();
+        match("(");
+        result = expression();
+        match(")");
       } else {
         throw "Syntax Error. Expected number or identifier or '(' but found " + (lookahead ? lookahead.value : "end of input") + " near '" + input.substr(lookahead.from) + "'";
       }
       return result;
-    };
+    }
+    
+    instruccion = function(){
+      while(true){
+        if(lookahead.type === "COSA"){
+          //declaracion
+        }
+        else if(lookahead.type === "SIESTO"){
+        //  sentencia
+        }
+        else if(lookahead.type === "NOPARESPLIS"){
+        //  bucle
+        }
+        else if(lookahead.type === "ID"){
+          if(lookahead.lookahead.type === "="){
+            //asignación
+          }
+          else if(lookahead.lookahead.type === "("){
+            //llamada
+          }
+        }
+        else{
+          break;
+        }
+      }
+    }
+    
+    sentencia = function(){
+      match("SIESTO");
+      match("(");
+      //condicion2
+      match(")");
+      match("{");
+      //instruccion
+      match("}");
+      while(lookahead.type === "SINOESTO"){
+        match("SINOESTO");
+        match("(");
+        //condicion2
+        match(")");
+        match("{");
+        //instruccion
+        match("}");
+      }
+      if(lookahead.type === "SINO"){
+        match("SINO");
+        match("{");
+        //instruccion
+        match("}");
+      }
+    }
+    
+    bucle = function(){
+      match("NOPARESPLIS");
+      match("(");
+      //condicion2
+      match(")");
+      match("{");
+      //instruccion
+      match("}");
+      match(";");
+    }
+    
+    condicion2 = function(){
+      if(lookahead.type === "("){
+        match("(");
+        //condicion
+        match(")");
+      }
+      //else if(lo que sea){
+      //  condicion
+      //}
+    }
     
     start = function() {
-      var result = assign();
+      var result = primario();
       return [result, tabla_id];
     }
 
