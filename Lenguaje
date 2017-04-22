@@ -2,9 +2,9 @@ Declaraciones:
     cosa nombre_variable = valor;
 
 Sentencias if:
-    quedices(condición){
-    
-    }
+    quedices(condición) entonces(esto es el then)
+    sinoesto (el elseif) entonces
+    sino (el else) entonces
 
 Condiciones:
     Las mismas que toda la vida en todos los lenguajes comunes.

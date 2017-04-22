@@ -36,8 +36,13 @@
     };
     RESERVED_WORD = {
       p: "P",
-      "if": "IF",
-      then: "THEN"
+      "if": "quedices",
+      then: "entonces",
+      "else if": "sinoesto",
+      "else": "sino",
+      "while": "noparesplis",
+      "var": "cosa",
+      "function": "hazesto"
     };
     make = function(type, value) {
       return {
