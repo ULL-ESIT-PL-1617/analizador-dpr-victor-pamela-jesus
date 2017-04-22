@@ -1,0 +1,24 @@
+Declaraciones:
+    cosa nombre_variable = valor;
+
+Sentencias if:
+    quedices(condición){
+    
+    }
+
+Condiciones:
+    Las mismas que toda la vida en todos los lenguajes comunes.
+
+Asignaciones:
+    Pues con el = de siempre.
+
+Bucle:
+    noparesplis(condicion){
+    
+    }
+    Lo que sería un while
+
+Funciones:
+    hazesto(atributos?){
+    
+    }
