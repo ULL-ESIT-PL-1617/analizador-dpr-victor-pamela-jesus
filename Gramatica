@@ -1,13 +1,15 @@
 Esta es la gramática:
 
     1.  Σ = { ADDOP, MULTOP, '(', ')', NUM, ',', '=', ID, 'IF', 'ELSE', 'THEN', BOOLEAN },
-    2.  V = {  compare, conditional, funcion, bucle, assign, 
-                comma, expression, term, factor, declaracion }
+    1.  Σ = { 'COSA', ID, '=', 'HAZESTO', 'QUEDICES'
+    2.  V = {  declaracion, expression, funcion, sentencia, bucle, condicion }
     Producciones:
-        1.  assign → ID '=' expression | comma
-        2.  comma → (conditional | expression) (',' (conditional | expression))*
-        3.  conditional → 'IF' expression 'THEN' expression 'ELSE' expression
-        4.  expression → term (( ADDOP term)* compare? | assign)
-        5.  compare → expression COMPARISONOPERATOR expression
-        6.  term → factor (MULTOP factor)*
-        7.  factor → NUM | ID | BOOLEAN | '(' assign ')' | conditional
+        1.  declaracion → 'COSA' ID '=' (funcion | expression)
+        2.  funcion → 'HAZESTO' '(' (expression)* ')' '{' (instruccion)* 
+            '}'
+        3.  instruccion → (declaracion | sentencia | bucle)
+        3.  expression → 
+        4.  sentencia → 'QUEDICES' (condicion) '{' (instruccion)* '}' ...
+        5.  bucle → 
+        6.  condicion → 
+        
