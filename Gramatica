@@ -1,0 +1,11 @@
+Esta es la gramática:
+
+    Σ = { ADDOP, MULOP, '(', ')', NUM, ',', '=', ID, COMPARISONOPERATOR },
+    V = { comma, expression, term, factor, asign, compare }
+    Producciones:
+        comma → asign (',' asign)*
+        asign → ID ('=' compare)* | compare
+        compare → NUM COMPARISONOPERATOR (expression) | expression
+        expression → term ( ADDOP term)*
+        term → factor (MULOP factor)*
+        factor → '(' comma ')' | NUM
