@@ -1,7 +1,8 @@
 Esta es la gramática:
 
     1.  Σ = { ADDOP, MULTOP, '(', ')', NUM, ',', '=', ID, 'IF', 'ELSE', 'THEN', BOOLEAN },
-    2.  V = {  compare, conditional, assign, comma, expression, term, factor }
+    2.  V = {  compare, conditional, funcion, bucle, assign, 
+                comma, expression, term, factor, declaracion }
     Producciones:
         1.  assign → ID '=' expression | comma
         2.  comma → (conditional | expression) (',' (conditional | expression))*

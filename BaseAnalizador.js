@@ -42,6 +42,17 @@
       "else": "ELSE"
     };
     
+    RESERVED_WORD = {
+      p: "P",
+      "quedices": "IF",
+      "entonces": "THEN",
+      "sinoesto": "ELSE IF",
+      "sino": "ELSE",
+      "noparesplis": "WHILE",
+      "cosa": "VAR",
+      "hazesto": "FUNCTION"
+    };
+    
     BOOLEAN = {
       "true": "TRUE",
       "false": "FALSE"
