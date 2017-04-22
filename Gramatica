@@ -1,11 +1,12 @@
 Esta es la gramática:
 
-    Σ = { ADDOP, MULOP, '(', ')', NUM, ',', '=', ID, COMPARISONOPERATOR },
-    V = { comma, expression, term, factor, asign, compare }
+    1.  Σ = { ADDOP, MULTOP, '(', ')', NUM, ',', '=', ID, 'IF', 'ELSE', 'THEN', BOOLEAN },
+    2.  V = {  compare, conditional, assign, comma, expression, term, factor }
     Producciones:
-        comma → asign (',' asign)*
-        asign → ID ('=' compare)* | compare
-        compare → NUM COMPARISONOPERATOR (expression) | expression
-        expression → term ( ADDOP term)*
-        term → factor (MULOP factor)*
-        factor → '(' comma ')' | NUM
+        1.  assign → ID '=' expression | comma
+        2.  comma → (conditional | expression) (',' (conditional | expression))*
+        3.  conditional → 'IF' expression 'THEN' expression 'ELSE' expression
+        4.  expression → term (( ADDOP term)* compare? | assign)
+        5.  compare → expression COMPARISONOPERATOR expression
+        6.  term → factor (MULTOP factor)*
+        7.  factor → NUM | ID | BOOLEAN | '(' assign ')' | conditional
