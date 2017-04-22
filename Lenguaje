@@ -2,7 +2,7 @@ Declaraciones:
     cosa nombre_variable = valor;
 
 Sentencias if:
-    quedices(condición) entonces(esto es el then)
+    siesto(condición) entonces(esto es el then)
     sinoesto (el elseif) entonces
     sino (el else) entonces
 
