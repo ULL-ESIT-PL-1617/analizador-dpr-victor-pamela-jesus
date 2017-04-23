@@ -103,7 +103,7 @@ var
 
   var parse = function(input) {
     var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
-    var primario, declaracion, asignacion, llamada, funcion, parametro, instruccion, sentencia, bucle, condicion2;
+    var primario, declaracion, asignacion, llamada, funcion, parametro, instruccion, sentencia, bucle, condicion;
     var tabla_id = {};
     tokens = input.tokens();
     lookahead = tokens.shift();
@@ -119,96 +119,35 @@ var
     };
     
     primario = function() {
+      var result;
       if(lookahead.type === "VAR") {
-        //declaracion
+        result = declaracion();
       }
       else if(lookahead.type === "ID") {
         if(lookahead.lookahead.type === "=") {
-          asignacion();
+          result = asignacion();
         } else if(lookahead.lookahead.type === "(") {
           // Todos los match los hago ya en llamada
-          llamada();
+          result = llamada();
         }
       }
-    };
-    expression = function() {
-      var result, right, type;
-      result = term();
-      while (lookahead && lookahead.type === "ADDOP") {
-        type = lookahead.value;
-        match("ADDOP");
-        right = term();
-        result = {
-          type: type,
-          left: result,
-          right: right
-        };
-      }
+      
       return result;
     };
-    term = function() {
-      var result, right, type;
-      result = factor();
-      while (lookahead && lookahead.type === "MULTOP") {
-        type = lookahead.value;
-        match("MULTOP");
-        right = factor();
-        result = {
-          type: type,
-          left: result,
-          right: right
-        };
-      }
-      return result;
-    };
-    factor = function() {
+    
+    declaracion = function() {
       var result;
-      result = null;
-      if (lookahead.type === "NUM") {
-        result = {
-          type: "NUM",
-          value: lookahead.value
-        };
-        match("NUM");
-      } else if (lookahead.type === "ID") {
-        result = {
-          type: "ID",
-          value: lookahead.value
-        };
-        match("ID");
-      } else if (lookahead.type === "(") {
-        match("(");
-        result = expression();
-        match(")");
-      } else {
-        throw "Syntax Error. Expected number or identifier or '(' but found " + (lookahead ? lookahead.value : "end of input") + " near '" + input.substr(lookahead.from) + "'";
-      }
-      return result;
-    };
-    llamada = function() {
-      var result = null;
-      var id;
-      var parameters = [];
-      id = lookahead.value();
-      match("ID");
-      match("(");
-      while(lookahead.type != ")") {
-        parameters.push(parametro());
-        if(lookahead.type === ",") {
-          match(",");
-        }
-      }
-      result = {
-        type: "call",
-        id: id,
-        parameters: parameters
+      match("VAR");
+      result = asignacion();
+      
+      result {
+        type: "VAR",
+        value: result
       };
+      
       return result;
     };
-    parametro = function() {
-      var result = expression();
-      return result;
-    };
+    
     asignacion = function() {
       var lh, rh;
       var result = null;
@@ -223,12 +162,14 @@ var
         rh = expression();
       }
       result = {
+        type: "ASSIGN"
         left_hand: lh,
         right_hand: rh,
       };
       match(";");
       return result;
     };
+    
     funcion = function(){
       var id;
       var parameters, instructions = [];
@@ -254,6 +195,204 @@ var
         parameters: parameters,
         instructions: instructions
       };
+      return result;
+    };
+    
+    instruccion = function(){
+      var result = [];
+      while(true){
+        if(lookahead.type === "COSA"){
+          result.push(declaracion());
+        }
+        else if(lookahead.type === "SIESTO"){
+         result.push(sentencia());
+        }
+        else if(lookahead.type === "NOPARESPLIS"){
+          result.push(bucle());
+        }
+        else if(lookahead.type === "ID"){
+          if(lookahead.lookahead.type === "="){
+            result.push(asignacion());
+          }
+          else if(lookahead.lookahead.type === "("){
+            result.push(llamada());
+          }
+        }
+        else{
+          break;
+        }
+      }
+      
+      return result;
+    };
+    
+    expression = function() {
+      var result, right, type;
+      result = term();
+      while (lookahead && lookahead.type === "ADDOP") {
+        type = lookahead.value;
+        match("ADDOP");
+        right = term();
+        result = {
+          type: type,
+          left: result,
+          right: right
+        };
+      }
+      return result;
+    };
+    
+    term = function() {
+      var result, right, type;
+      result = factor();
+      while (lookahead && lookahead.type === "MULTOP") {
+        type = lookahead.value;
+        match("MULTOP");
+        right = factor();
+        result = {
+          type: type,
+          left: result,
+          right: right
+        };
+      }
+      return result;
+    };
+    
+    factor = function() {
+      var result;
+      result = null;
+      if (lookahead.type === "NUM") {
+        result = {
+          type: "NUM",
+          value: lookahead.value
+        };
+        match("NUM");
+      } else if (lookahead.type === "ID") {
+        result = {
+          type: "ID",
+          value: lookahead.value
+        };
+        match("ID");
+      } else if (lookahead.type === "(") {
+        match("(");
+        result = expression();
+        match(")");
+      } else {
+        throw "Syntax Error. Expected number or identifier or '(' but found " + (lookahead ? lookahead.value : "end of input") + " near '" + input.substr(lookahead.from) + "'";
+      }
+      return result;
+    };
+    
+   condition = function() {
+      var left, result, right, type;
+      left = parametro();
+      type = lookahead.value;
+      match("COMPARISONOPERATOR");
+      right = parametro();
+      result = {
+        type: type,
+        left: left,
+        right: right
+      };
+      return result;
+    };
+    
+    sentencia = function(){
+      var result = [];
+      var condicion, instruccion, elemento;
+      
+      match("SIESTO");
+      match("(");
+      condicion = condicion();
+      match(")");
+      match("{");
+      instruccion = instruccion();
+      match("}");
+      
+      elemento {
+        type: "IF",
+        condition: condicion,
+        instruction: instruccion
+      };
+      
+      result.push(elemento);
+      
+      while(lookahead.type === "SINOESTO"){
+        match("SINOESTO");
+        match("(");
+        condicion = condicion ();
+        match(")");
+        match("{");
+        instruccion = instruccion;
+        match("}");
+        
+        elemento {
+          type: "ELSEIF",
+          condition: condicion,
+          instruction: instruccion
+        };
+       
+        result.push(elemento);
+      }
+      if(lookahead.type === "SINO"){
+        match("SINO");
+        match("{");
+        instruccion = instruccion();
+        match("}");
+        
+        elemento {
+          type: "ELSE",
+          instruction: instruccion
+        };
+       
+        result.push(elemento);
+      }
+      
+      return result;
+    }
+    
+    bucle = function(){
+      var result, condicion, instruccion;
+      match("NOPARESPLIS");
+      match("(");
+      condicion = condicion();
+      match(")");
+      match("{");
+      instruccion = instruccion();
+      match("}");
+      match(";");
+      result {
+        type: "BUCLE",
+        condition: condicion,
+        instruction: instruccion
+      };
+      
+      return result;
+    };
+    
+    llamada = function() {
+      var result = null;
+      var id;
+      var parameters = [];
+      id = lookahead.value();
+      match("ID");
+      match("(");
+      while(lookahead.type != ")") {
+        parameters.push(parametro());
+        if(lookahead.type === ",") {
+          match(",");
+        }
+      }
+      result = {
+        type: "call",
+        id: id,
+        parameters: parameters
+      };
+      return result;
+    };
+    
+    parametro = function() {
+      var result = expression();
       return result;
     };
 
