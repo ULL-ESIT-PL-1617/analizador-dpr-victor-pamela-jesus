@@ -17,6 +17,7 @@
 
   String.prototype.tokens = function() {
     var RESERVED_WORD, from, getTok, i, key, m, make, n, result, rw, tokens, value;
+var 
     from = void 0;
     i = 0;
     n = void 0;
@@ -36,13 +37,13 @@
     };
     RESERVED_WORD = {
       p: "P",
-      "quedices": "IF",
-      "entonces": "THEN",
-      "sinoesto": "ELSE IF",
-      "sino": "ELSE",
-      "noparesplis": "WHILE",
-      "cosa": "VAR",
-      "hazesto": "FUNCTION"
+      "if": "IF",
+      "then": "THEN",
+      elseif: "ELSE IF",
+      "else": "ELSE",
+      "while": "WHILE",
+      "var": "VAR",
+      "function": "FUNCTION"
     };
     make = function(type, value) {
       return {
@@ -102,6 +103,8 @@
 
   var parse = function(input) {
     var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
+    var primario, declaracion, asignacion, llamada, funcion, parametro, instruccion, sentencia, bucle, condicion2;
+    var tabla_id = {};
     tokens = input.tokens();
     lookahead = tokens.shift();
     match = function(t) {
@@ -115,6 +118,19 @@
       }
     };
     
+    primario = function() {
+      if(lookahead.type === "VAR") {
+        //declaracion
+      }
+      else if(lookahead.type === "ID") {
+        if(lookahead.lookahead.type === "=") {
+          asignacion();
+        } else if(lookahead.lookahead.type === "(") {
+          // Todos los match los hago ya en llamada
+          llamada();
+        }
+      }
+    };
     expression = function() {
       var result, right, type;
       result = term();
@@ -169,10 +185,81 @@
       }
       return result;
     };
+    llamada = function() {
+      var result = null;
+      var id;
+      var parameters = [];
+      id = lookahead.value();
+      match("ID");
+      match("(");
+      while(lookahead.type != ")") {
+        parameters.push(parametro());
+        if(lookahead.type === ",") {
+          match(",");
+        }
+      }
+      result = {
+        type: "call",
+        id: id,
+        parameters: parameters
+      };
+      return result;
+    };
+    parametro = function() {
+      var result = expression();
+      return result;
+    };
+    asignacion = function() {
+      var lh, rh;
+      var result = null;
+      lh = lookahead.value;
+      match("ID");
+      match("=");
+      // Lo podemos hacer como en JS donde pones function para definir funciones
+      if(lookahead.type === "function"){
+        rh = funcion();
+      }
+      else {
+        rh = expression();
+      }
+      result = {
+        left_hand: lh,
+        right_hand: rh,
+      };
+      match(";");
+      return result;
+    };
+    funcion = function(){
+      var id;
+      var parameters, instructions = [];
+      var result;
+      // ?
+      //match("HAZESTO");
+      id = lookahead.value;
+      match("ID");
+      match("(");
+      while(lookahead.type === "ID" || lookahead.type === "(" || lookahead.type === "NUM"){
+        parameters.push(parametro());
+      }
+      match(")");
+      match("{");
+      while(lookahead.type !== "}") {
+        instructions.push(instruccion());
+      }
+      match("}");
+      match(";");
+      result = {
+        type: "function",
+        id: id,
+        parameters: parameters,
+        instructions: instructions
+      };
+      return result;
+    };
 
-    tree = expression(input);
+    tree = primario(input);
     if (lookahead != null) {
       throw "Syntax Error parsing statements. " + "Expected 'end of input' and found '" + input.substr(lookahead.from) + "'";
     }
-    return tree;
+    return {tree: tree, tabla_id: tabla_id};
   };
