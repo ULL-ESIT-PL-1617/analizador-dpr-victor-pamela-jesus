@@ -42,7 +42,7 @@
       "SINO": "ELSE",
       "NOPARESPLIS": "WHILE",
       "VAR": "VAR",
-      "function": "FUNCTION"
+      "FUNCTION": "FUNCTION"
     };
     make = function(type, value) {
       return {
@@ -172,7 +172,7 @@
       match("ID");
       match("=");
       // Lo podemos hacer como en JS donde pones function para definir funciones
-      if(lookahead.type === "function"){
+      if(lookahead.type === "FUNCTION"){
         rh = funcion();
       }
       else {
@@ -192,10 +192,7 @@
       var id;
       var parameters, instructions = [];
       var result;
-      // ?
-      //match("HAZESTO");
-      id = lookahead.value;
-      match("ID");
+      match("FUNCTION");
       match("(");
       while(lookahead.type === "ID" || lookahead.type === "(" || lookahead.type === "NUM"){
         parameters.push(parametro());
@@ -209,7 +206,6 @@
       match(";");
       result = {
         type: "function",
-        id: id,
         parameters: parameters,
         instructions: instructions
       };
