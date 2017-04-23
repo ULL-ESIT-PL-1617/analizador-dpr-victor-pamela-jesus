@@ -123,15 +123,18 @@
     
     primario = function() {
       var result = [];
+      var temp, lh;
       if(lookahead.type === "VAR") {
         result.push(declaracion());
       }
       else if(lookahead.type === "ID") {
-        if(lookahead.lookahead.type === "=") {
-          result.push(asignacion());
-        } else if(lookahead.lookahead.type === "(") {
+        lh = lookahead.value;
+        match("ID");
+        if(lookahead.type === "=") {
+          result.push(asignacion(lh));
+        } else if(lookahead.type === "(") {
           // Todos los match los hago ya en llamada
-          result.push(llamada());
+          result.push(llamada(lh));
         }
       }
       
@@ -140,6 +143,7 @@
          result.push(declaracion());
         }
         else if(lookahead.type === "ID") {
+          match("ID");
           if(lookahead.lookahead.type === "=") {
             result.push(asignacion());
           } else if(lookahead.lookahead.type === "(") {
@@ -165,11 +169,14 @@
       return result;
     };
     
-    asignacion = function() {
-      var lh, rh;
+    asignacion = function(lh) {
+      var rh;
       var result = null;
-      lh = lookahead.value;
-      match("ID");
+      //lh = lookahead.value;
+      if (lookahead.type === "ID") {
+        lh = lookahead.value;
+        match("ID");
+      }
       match("=");
       // Lo podemos hacer como en JS donde pones function para definir funciones
       if(lookahead.type === "function"){
@@ -388,12 +395,15 @@
       return result;
     };
     
-    llamada = function() {
+    llamada = function(id) {
       var result = null;
-      var id;
+      //var id;
       var parameters = [];
-      id = lookahead.value();
-      match("ID");
+      //id = lookahead.value();
+      if (lookahead.type === "ID"){
+        id = lookahead.value();
+        match("ID");
+      }
       match("(");
       while(lookahead.type != ")") {
         parameters.push(parametro());
