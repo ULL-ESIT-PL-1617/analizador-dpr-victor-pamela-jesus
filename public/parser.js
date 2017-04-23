@@ -1,4 +1,4 @@
-  Object.constructor.prototype.error = function(message, t) {
+Object.constructor.prototype.error = function(message, t) {
     t = t || this;
     t.name = "SyntaxError";
     t.message = message;
@@ -124,31 +124,19 @@
     primario = function() {
       var result = [];
       var temp, lh;
-      if(lookahead.type === "VAR") {
-        result.push(declaracion());
-      }
-      else if(lookahead.type === "ID") {
-        lh = lookahead.value;
-        match("ID");
-        if(lookahead.type === "=") {
-          result.push(asignacion(lh));
-        } else if(lookahead.type === "(") {
-          // Todos los match los hago ya en llamada
-          result.push(llamada(lh));
-        }
-      }
       
       while (lookahead && (lookahead.type === "ID" || lookahead.type === "VAR")) {
         if(lookahead.type === "VAR") {
          result.push(declaracion());
         }
         else if(lookahead.type === "ID") {
+          lh = lookahead.value;
           match("ID");
-          if(lookahead.lookahead.type === "=") {
-            result.push(asignacion());
-          } else if(lookahead.lookahead.type === "(") {
+          if(lookahead.type === "=") {
+            result.push(asignacion(lh));
+          } else if(lookahead.type === "(") {
             // Todos los match los hago ya en llamada
-            result.push(llamada());
+            result.push(llamada(lh));
           }
         }
       }
@@ -159,7 +147,9 @@
     declaracion = function() {
       var result;
       match("VAR");
-      result = asignacion();
+      lh = lookahead.value;
+      match("ID");
+      result = asignacion(lh);
       
       result = {
         type: "VAR",
@@ -173,16 +163,12 @@
       var rh;
       var result = null;
       //lh = lookahead.value;
-      if (lookahead.type === "ID") {
-        lh = lookahead.value;
-        match("ID");
-      }
       match("=");
-      // Lo podemos hacer como en JS donde pones function para definir funciones
       if(lookahead.type === "FUNCTION"){
         rh = funcion();
       }
       else {
+        console.log("ey bou2");
         rh = expression();
       }
       result = {
@@ -210,9 +196,8 @@
         instructions.push(instruccion());
       }
       match("}");
-      match(";");
       result = {
-        type: "function",
+        type: "FUNCTION",
         parameters: parameters,
         instructions: instructions
       };
