@@ -36,12 +36,12 @@
     };
     RESERVED_WORD = {
       p: "P",
-      "if": "IF",
+      "SIESTO": "IF",
       "then": "THEN",
-      "elseif": "ELSEIF",
-      "else": "ELSE",
-      "while": "WHILE",
-      "var": "VAR",
+      "SINOESTO": "ELSEIF",
+      "SINO": "ELSE",
+      "NOPARESPLIS": "WHILE",
+      "VAR": "VAR",
       "function": "FUNCTION"
     };
     make = function(type, value) {
