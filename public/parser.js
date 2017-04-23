@@ -301,7 +301,7 @@
       return result;
     };
     
-    condition = function() {
+    condicion = function() {
       var left, result, right, type;
       left = parametro();
       type = lookahead.value;
