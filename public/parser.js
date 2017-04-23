@@ -143,7 +143,7 @@
       match("VAR");
       result = asignacion();
       
-      result {
+      result = {
         type: "VAR",
         value: result
       };
@@ -312,7 +312,7 @@
       instruccion = instruccion();
       match("}");
       
-      elemento {
+      elemento = {
         type: "IF",
         condition: condicion,
         instruction: instruccion
@@ -329,7 +329,7 @@
         instruccion = instruccion;
         match("}");
         
-        elemento {
+        elemento = {
           type: "ELSEIF",
           condition: condicion,
           instruction: instruccion
@@ -343,7 +343,7 @@
         instruccion = instruccion();
         match("}");
         
-        elemento {
+        elemento = {
           type: "ELSE",
           instruction: instruccion
         };
@@ -364,7 +364,7 @@
       instruccion = instruccion();
       match("}");
       match(";");
-      result {
+      result = {
         type: "BUCLE",
         condition: condicion,
         instruction: instruccion
