@@ -36,11 +36,11 @@ Object.constructor.prototype.error = function(message, t) {
     };
     RESERVED_WORD = {
       p: "P",
-      "SIESTO": "IF",
+      "IF": "IF",
       "then": "THEN",
-      "SINOESTO": "ELSEIF",
-      "SINO": "ELSE",
-      "NOPARESPLIS": "WHILE",
+      "ELSEIF": "ELSEIF",
+      "ELSE": "ELSE",
+      "WHILE": "WHILE",
       "VAR": "VAR",
       "FUNCTION": "FUNCTION"
     };
@@ -168,7 +168,6 @@ Object.constructor.prototype.error = function(message, t) {
         rh = funcion();
       }
       else {
-        console.log("ey bou2");
         rh = expression();
       }
       result = {
@@ -183,12 +182,15 @@ Object.constructor.prototype.error = function(message, t) {
     
     funcion = function(){
       var id;
-      var parameters, instructions = [];
+      var parameters = [], instructions = [];
       var result;
       match("FUNCTION");
       match("(");
       while(lookahead.type === "ID" || lookahead.type === "(" || lookahead.type === "NUM"){
         parameters.push(parametro());
+        if(lookahead.type === ",") {
+          match(",");
+        }
       }
       match(")");
       match("{");
@@ -217,11 +219,13 @@ Object.constructor.prototype.error = function(message, t) {
           result.push(bucle());
         }
         else if(lookahead.type === "ID"){
-          if(lookahead.lookahead.type === "="){
-            result.push(asignacion());
+          lh = lookahead.value;
+          match("ID");
+          if(lookahead.type === "="){
+            result.push(asignacion(lh));
           }
-          else if(lookahead.lookahead.type === "("){
-            result.push(llamada());
+          else if(lookahead.type === "("){
+            result.push(llamada(lh));
           }
         }
         else{
@@ -293,7 +297,7 @@ Object.constructor.prototype.error = function(message, t) {
       var left, result, right, type;
       left = parametro();
       type = lookahead.value;
-      match("COMPARISONOPERATOR");
+      match("COMPARISON");
       right = parametro();
       result = {
         type: type,
@@ -305,20 +309,20 @@ Object.constructor.prototype.error = function(message, t) {
     
     sentencia = function(){
       var result = [];
-      var condicion, instruccion, elemento;
+      var cond, instruc, elemento;
       
       match("IF");
       match("(");
-      condicion = condicion();
+      cond = condicion();
       match(")");
       match("{");
-      instruccion = instruccion();
+      instruc = instruccion();
       match("}");
       
       elemento = {
         type: "IF",
-        condition: condicion,
-        instruction: instruccion
+        condition: cond,
+        instruction: instruc
       };
       
       result.push(elemento);
@@ -326,16 +330,16 @@ Object.constructor.prototype.error = function(message, t) {
       while(lookahead.type === "ELSEIF"){
         match("ELSEIF");
         match("(");
-        condicion = condicion ();
+        cond = condicion();
         match(")");
         match("{");
-        instruccion = instruccion;
+        instruc = instruccion();
         match("}");
         
         elemento = {
           type: "ELSEIF",
-          condition: condicion,
-          instruction: instruccion
+          condition: cond,
+          instruction: instruc
         };
        
         result.push(elemento);
@@ -343,12 +347,12 @@ Object.constructor.prototype.error = function(message, t) {
       if(lookahead.type === "ELSE"){
         match("ELSE");
         match("{");
-        instruccion = instruccion();
+        instruc = instruccion();
         match("}");
         
         elemento = {
           type: "ELSE",
-          instruction: instruccion
+          instruction: instruc
         };
        
         result.push(elemento);
@@ -358,19 +362,18 @@ Object.constructor.prototype.error = function(message, t) {
     };
     
     bucle = function(){
-      var result, condicion, instruccion;
+      var result, cond, instruc;
       match("WHILE");
       match("(");
-      condicion = condicion();
+      cond = condicion();
       match(")");
       match("{");
-      instruccion = instruccion();
+      instruc = instruccion();
       match("}");
-      match(";");
       result = {
         type: "BUCLE",
-        condition: condicion,
-        instruction: instruccion
+        condition: cond,
+        instruction: instruc
       };
       
       return result;
