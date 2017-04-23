@@ -17,7 +17,6 @@
 
   String.prototype.tokens = function() {
     var RESERVED_WORD, from, getTok, i, key, m, make, n, result, rw, tokens, value;
-var 
     from = void 0;
     i = 0;
     n = void 0;
@@ -102,7 +101,7 @@ var
   };
 
   var parse = function(input) {
-    var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
+    var expression, factor, lookahead, match, statement, statements, term, tokens, tree;
     var primario, declaracion, asignacion, llamada, funcion, parametro, instruccion, sentencia, bucle, condicion;
     var tabla_id = {};
     tokens = input.tokens();
@@ -162,9 +161,9 @@ var
         rh = expression();
       }
       result = {
-        type: "ASSIGN"
+        type: "ASSIGN",
         left_hand: lh,
-        right_hand: rh,
+        right_hand: rh
       };
       match(";");
       return result;
