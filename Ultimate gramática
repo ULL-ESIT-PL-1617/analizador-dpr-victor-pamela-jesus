@@ -1,6 +1,6 @@
 Esta es la gramática:
 
-    1.  Σ = { 'VAR', ID, '=', 'HAZESTO', 'SIESTO', 'SINOESTO', 'SINO', NUM, ADDOP, MULOP, 
+    1.  Σ = { 'VAR', ID, '=', 'HAZESTO', 'IF', 'ELSEIF', 'ELSE', NUM, ADDOP, MULOP, 
               '{', '}', '(', ')', COMPARISONOPERATOR, '||', '&&', NOPARESPLIS ';' }
     2.  V = { primario, declaracion, asignacion, funcion, instruccion, expression,
               term, factor, condicion, condicion2, sentencia, bucle, llamada, atributo }
@@ -14,8 +14,8 @@ Esta es la gramática:
         7.  term → factor (MULOP factor)*
         8.  factor → '(' expression ')' | NUM
         9.  condicion → parametro COMPARISONOPERATOR parametro
-        10. sentencia → 'SIESTO' (condicion2) '{' instruccion '}' 
-            ('SINOESTO' (condicion) '{' instruccion '}')* ('SINO' '{' instruccion '}')? ;
-        11. bucle → 'NOPARESPLIS' (condicion) '{' instruccion '}' ;
+        10. sentencia → 'IF' (condicion2) '{' instruccion '}' 
+            ('ELSEIF' (condicion) '{' instruccion '}')* ('ELSE' '{' instruccion '}')? ;
+        11. bucle → 'WHILE' (condicion) '{' instruccion '}' ;
         12. llamada → ID '(' (atributo)* ')' ;
         13. parametro → expression | ID

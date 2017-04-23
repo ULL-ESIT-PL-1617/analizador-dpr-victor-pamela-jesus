@@ -122,16 +122,30 @@
     };
     
     primario = function() {
-      var result;
+      var result = [];
       if(lookahead.type === "VAR") {
-        result = declaracion();
+        result.push(declaracion());
       }
       else if(lookahead.type === "ID") {
         if(lookahead.lookahead.type === "=") {
-          result = asignacion();
+          result.push(asignacion());
         } else if(lookahead.lookahead.type === "(") {
           // Todos los match los hago ya en llamada
-          result = llamada();
+          result.push(llamada());
+        }
+      }
+      
+      while (lookahead && (lookahead.type === "ID" || lookahead.type === "VAR")) {
+        if(lookahead.type === "VAR") {
+         result.push(declaracion());
+        }
+        else if(lookahead.type === "ID") {
+          if(lookahead.lookahead.type === "=") {
+            result.push(asignacion());
+          } else if(lookahead.lookahead.type === "(") {
+            // Todos los match los hago ya en llamada
+            result.push(llamada());
+          }
         }
       }
       
@@ -170,6 +184,7 @@
         right_hand: rh
       };
       match(";");
+      tabla_id[lh] = rh;
       return result;
     };
     
