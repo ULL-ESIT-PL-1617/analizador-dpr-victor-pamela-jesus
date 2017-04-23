@@ -1,0 +1,174 @@
+$red: #c30;
+$black: #444;
+$gray6: #666;
+$gray9: #999;
+$graycasiblack: #111;
+$green: #2dc234;
+$white: #fff;
+$blue: #002EB8;
+$main-font: Helvetica, Arial, sans-serif;
+$font2: Tahoma, Geneva, sans-serif;
+
+body {
+  font-family: $main-font;
+  background: #000 url(/images/textura.png);
+}
+
+h1 {
+  color: $white;
+  font-family: font2; margin: 30px 0 0 40px; padding: 0px;
+}
+
+h2 {
+  color: $white;
+  font-size: 20px; margin: 0px; padding: 0px;
+}
+
+@mixin tabs ($background: blue, $color: yellow) {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: $background;
+    overflow: hidden;
+  }
+  li {
+    float: left;
+  }
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+    background: $background;
+    color: $color;
+    &:hover {
+      background: darken($background, 20%);
+    }
+  }
+}
+
+nav {
+  @include tabs ($background: $gray6, $color: $white);
+  font-weight: bold;
+  border: 1px solid $gray9;
+  margin-top: 15px;
+}
+
+p {
+  font: 25px/1.4 $main-font;
+}
+
+label {
+  display: block;
+}
+
+nav a.current {
+  background: lighten($black, 50%);
+}
+
+.flash {
+  width: 600px;
+  padding: 5px;
+  font-weight: bold;
+  margin: 20px;
+  background: lighten($red, 60%);
+  color: $red;
+  border: 1px solid $red;
+}
+
+#like {
+  p {
+    font-weight: bold;
+    color: $red;
+  }
+  input {
+    background: $red url(/images/like.png) 0 2px no-repeat;
+    border: darken($red, 10%) 1px solid;
+    height: 28px;
+    padding-left: 24px;
+  }
+}
+
+.loadfile {
+  background-color: $black;
+  border-radius: 5px;
+  border: 2px solid #DDD;
+  line-height: 80px;
+  
+  //width: 75%;
+  height: 20px;
+  padding: 5px;
+
+  button, input {
+    color: $black;
+    float: left;
+    list-style: none;
+
+    display: inline;
+    text-align: center;
+    font-weight: bolder;
+  }
+   
+  button:hover, input:hover {
+    cursor:pointer;
+  }
+}
+   
+.error {
+  color: $white;
+  background-color: $black;
+}
+
+.centered {
+  text-align: center;
+}
+
+#original {
+  border: $gray9 2px dotted;
+  background-color: $white;
+  padding: 10px;
+  font-size: 15px;
+  height: lin;
+}
+
+#header p {
+  color: $green;
+  font-size: 20px;
+  font-family: $font2;
+}
+
+#OUTPUT {
+  color: $white;
+  width: 80%;
+  background-color: $graycasiblack;
+}
+
+.loadfile {
+  font-weight: bold;
+  border: 1px solid $gray9;
+  margin-top: 15px;
+}
+
+.Boton {
+    background-color: #2dc234;
+    background-image: -webkit-linear-gradient(rgba(41, 150, 47, .8), rgba(45, 194, 52, .2));
+    background-image: -moz-linear-gradient(rgba(41, 150, 47, .8), rgba(45, 194, 52, .2));
+    background-image: -o-linear-gradient(rgba(41, 150, 47, .8), rgba(45, 194, 52, .2));
+    background-image: linear-gradient(rgba(41, 150, 47, .8), rgba(45, 194, 52, .2));
+    -ms-border-radius:8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 8px 0 #197b1d, 0 10px 20px rgba(0, 0, 0, .4);
+    -moz-box-shadow: 0 8px 0 #197b1d, 0 10px 20px rgba(0, 0, 0, .4);
+    box-shadow: 0 8px 0 #197b1d, 0 10px 20px rgba(0, 0, 0, .4);
+    color: #fff;
+    display: inline-block;
+    font-family: ‘Pacifico’, Arial, sans-serif;
+    font-size: 25px;
+    line-height: 1;
+    padding: 10px 15px;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px rgba(25, 123, 29, .7);
+    margin: 10px 0 20px 0;
+}
