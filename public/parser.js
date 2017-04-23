@@ -52,15 +52,18 @@
         to: i
       };
     };
+    
     getTok = function() {
       var str;
       str = m[0];
       i += str.length;
       return str;
     };
+    
     if (!this) {
       return;
     }
+    
     while (i < this.length) {
       for (key in tokens) {
         value = tokens[key];
@@ -115,6 +118,7 @@
       } else {
         throw ("Syntax Error. Expected " + t + " found '") + lookahead.value + "' near '" + input.substr(lookahead.from) + "'";
       }
+    
     };
     
     primario = function() {
@@ -200,7 +204,7 @@
     instruccion = function(){
       var result = [];
       while(true){
-        if(lookahead.type === "COSA"){
+        if(lookahead.type === "VAR"){
           result.push(declaracion());
         }
         else if(lookahead.type === "SIESTO"){
@@ -348,7 +352,7 @@
       }
       
       return result;
-    }
+    };
     
     bucle = function(){
       var result, condicion, instruccion;
