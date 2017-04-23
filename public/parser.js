@@ -38,7 +38,7 @@
       p: "P",
       "if": "IF",
       "then": "THEN",
-      elseif: "ELSE IF",
+      "elseif": "ELSEIF",
       "else": "ELSE",
       "while": "WHILE",
       "var": "VAR",
@@ -207,10 +207,10 @@
         if(lookahead.type === "VAR"){
           result.push(declaracion());
         }
-        else if(lookahead.type === "SIESTO"){
+        else if(lookahead.type === "IF"){
          result.push(sentencia());
         }
-        else if(lookahead.type === "NOPARESPLIS"){
+        else if(lookahead.type === "WHILE"){
           result.push(bucle());
         }
         else if(lookahead.type === "ID"){
@@ -286,7 +286,7 @@
       return result;
     };
     
-   condition = function() {
+    condition = function() {
       var left, result, right, type;
       left = parametro();
       type = lookahead.value;
@@ -304,7 +304,7 @@
       var result = [];
       var condicion, instruccion, elemento;
       
-      match("SIESTO");
+      match("IF");
       match("(");
       condicion = condicion();
       match(")");
@@ -320,8 +320,8 @@
       
       result.push(elemento);
       
-      while(lookahead.type === "SINOESTO"){
-        match("SINOESTO");
+      while(lookahead.type === "ELSEIF"){
+        match("ELSEIF");
         match("(");
         condicion = condicion ();
         match(")");
@@ -337,8 +337,8 @@
        
         result.push(elemento);
       }
-      if(lookahead.type === "SINO"){
-        match("SINO");
+      if(lookahead.type === "ELSE"){
+        match("ELSE");
         match("{");
         instruccion = instruccion();
         match("}");
@@ -356,7 +356,7 @@
     
     bucle = function(){
       var result, condicion, instruccion;
-      match("NOPARESPLIS");
+      match("WHILE");
       match("(");
       condicion = condicion();
       match(")");
