@@ -378,15 +378,9 @@ Object.constructor.prototype.error = function(message, t) {
     
     llamada = function(id) {
       var result = null;
-      //var id;
       var parameters = [];
-      //id = lookahead.value();
-      if (lookahead.type === "ID"){
-        id = lookahead.value();
-        match("ID");
-      }
       match("(");
-      while(lookahead.type != ")") {
+      while(lookahead.type !== ")") {
         parameters.push(parametro());
         if(lookahead.type === ",") {
           match(",");
@@ -397,6 +391,8 @@ Object.constructor.prototype.error = function(message, t) {
         id: id,
         parameters: parameters
       };
+      match(")");
+      match(";");
       return result;
     };
     
