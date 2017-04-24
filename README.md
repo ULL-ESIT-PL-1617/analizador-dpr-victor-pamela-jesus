@@ -9,7 +9,7 @@ Esta es la gramática:
     1.  Σ = { 'VAR', ID, '=', 'FUNCTION', 'IF', 'ELSEIF', 'ELSE', NUM, ADDOP, MULOP, 
               '{', '}', '(', ')', COMPARISONOPERATOR, '||', '&&', 'WHILE' ';' }
     2.  V = { primario, declaracion, asignacion, funcion, instruccion, expression,
-              term, factor, condicion, condicion2, sentencia, bucle, llamada, atributo }
+              term, factor, condicion, sentencia, bucle, llamada, parametro}
     3.  Producciones:
         1.  primario → (declaracion | (llamada | asignacion))* //Esto es lo que puede haber en global
         2.  declaracion → 'VAR' asignacion 
