@@ -6,7 +6,7 @@
 
 ### Ejemplo de uso
 
-    VAR a = 2; VAR b = 3; hola = FUNCTION () { IF (a > b) { a = 3; }};
+    VAR a = 2; VAR b = 3; hola = FUNCTION () { IF (a < b) { a = 3; }};
 
 Esta es la gramática:
 
