@@ -4,6 +4,10 @@
 
 # Gramática
 
+### Ejemplo de uso
+
+    VAR a = 2; VAR b = 3; hola = FUNCTION () { IF (a > b) { a = 3; }};
+
 Esta es la gramática:
 
     1.  Σ = { 'VAR', ID, '=', 'FUNCTION', 'IF', 'ELSEIF', 'ELSE', NUM, ADDOP, MULOP, 
@@ -25,10 +29,6 @@ Esta es la gramática:
         11. bucle → 'WHILE' (condicion) '{' instruccion '}' ;
         12. llamada → ID '(' (atributo)* ')' ;
         13. parametro → expression | ID
-        
-# Ejemplo de uso
-
-VAR a = 2; VAR b = 3; hola = FUNCTION () { IF (a > b) { a = 3; }};
 
 # Solución a la Práctica Evaluar Analizador Descendente Predictivo Recursivo
 
